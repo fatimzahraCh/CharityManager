@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:17
+    container_name: postgres_charity_db
+    environment:
+      POSTGRES_DB: charity_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
