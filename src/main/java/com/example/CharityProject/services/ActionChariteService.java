@@ -52,4 +52,8 @@ public class ActionChariteService {
     public List<ActionCharite> obtenirActionsActives() {
         return actionRepository.findByIsArchivedFalse();
     }
+
+    public List<ActionCharite> obtenirToutesLesActions() {
+        return actionRepository.findAll();
+    }
 }

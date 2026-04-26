@@ -1,5 +1,6 @@
 package com.example.CharityProject.controllers;
 
+import com.example.CharityProject.dto.UserRegistrationDTO; // Import du DTO
 import com.example.CharityProject.entities.User;
 import com.example.CharityProject.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -18,16 +19,17 @@ public class UserController {
 
     // POST : http://localhost:8080/api/users/inscrire
     @PostMapping("/inscrire")
-    public ResponseEntity<?> inscrire(@RequestBody User user) {
+    // On change le type reçu : @RequestBody User -> @RequestBody UserRegistrationDTO
+    public ResponseEntity<?> inscrire(@RequestBody UserRegistrationDTO userDto) {
         try {
-            User nouvelUtilisateur = userService.inscrireUtilisateur(user);
+            // On passe maintenant le DTO au service
+            User nouvelUtilisateur = userService.inscrireUtilisateur(userDto);
             return new ResponseEntity<>(nouvelUtilisateur, HttpStatus.CREATED);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    // GET : http://localhost:8080/api/users/tous
     @GetMapping("/tous")
     public ResponseEntity<List<User>> obtenirTous() {
         return ResponseEntity.ok(userService.obtenirTousLesUtilisateurs());

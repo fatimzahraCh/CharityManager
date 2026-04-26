@@ -1,5 +1,6 @@
 package com.example.CharityProject.controllers;
 
+import com.example.CharityProject.dto.OrganisationDTO;
 import com.example.CharityProject.entities.Organisation;
 import com.example.CharityProject.services.OrganisationService;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors; // Ajout de l'import
 
 @RestController
 @RequestMapping("/api/organisations")
@@ -16,31 +18,43 @@ public class OrganisationController {
 
     private final OrganisationService organisationService;
 
-    // POST : http://localhost:8080/api/organisations/inscrire?userId=1
     @PostMapping("/inscrire")
-    public ResponseEntity<?> inscrire(@RequestBody Organisation organisation, @RequestParam Long userId) { // <-- userId est récupéré depuis l'URL
+    public ResponseEntity<?> inscrire(@RequestBody Organisation organisation, @RequestParam Long userId) {
         try {
             Organisation orga = organisationService.inscrireOrganisation(organisation, userId);
-            return new ResponseEntity<>(orga, HttpStatus.CREATED);
-        } catch (RuntimeException e) {
+            return new ResponseEntity<>(mapToDto(orga), HttpStatus.CREATED);
+        } catch (Exception e) { // Utilise Exception pour capturer toutes les erreurs
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    // GET : http://localhost:8080/api/organisations/en-attente
     @GetMapping("/en-attente")
-    public ResponseEntity<List<Organisation>> getEnAttente() {
-        return ResponseEntity.ok(organisationService.obtenirOrganisationsEnAttente());
+    public ResponseEntity<List<OrganisationDTO>> getEnAttente() {
+        List<Organisation> enAttente = organisationService.obtenirOrganisationsEnAttente();
+        // Version plus compatible pour transformer en liste
+        List<OrganisationDTO> dtos = enAttente.stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 
-    // PUT : http://localhost:8080/api/organisations/{id}/valider
     @PutMapping("/{id}/valider")
     public ResponseEntity<?> validerOrganisation(@PathVariable Long id) {
         try {
             Organisation orgaValidee = organisationService.validerOrganisation(id);
-            return ResponseEntity.ok(orgaValidee);
-        } catch (RuntimeException e) {
+            return ResponseEntity.ok(mapToDto(orgaValidee));
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
+    }
+
+    private OrganisationDTO mapToDto(Organisation organisation) {
+        return OrganisationDTO.builder()
+                .id(organisation.getId())
+                .nom(organisation.getNom())
+                .description(organisation.getDescriptionMissions())
+                .siteWeb(organisation.getLogoUrl())
+                .telephone(organisation.getAdresseLegale())
+                .build();
     }
 }

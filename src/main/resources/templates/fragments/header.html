@@ -1,0 +1,12 @@
+<div th:fragment="navbar">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/static}">CharityConnect</a>
+            <div class="navbar-nav">
+                <a class="nav-link" th:href="@{/api/actions/liste}">Actions</a>
+                <a class="nav-link" th:href="@{/login}">Connexion</a>
+                <a class="nav-link btn btn-success text-white ms-lg-3" th:href="@{/register}">S'inscrire</a>
+            </div>
+        </div>
+    </nav>
+</div>
