@@ -21,4 +21,15 @@ public class WebHomeController {
         // On retourne la vue index.html
         return "index";
     }
+
+    @GetMapping("/explore")
+    public String afficherExplore(Model model) {
+        model.addAttribute("actions", actionService.obtenirToutesLesActions());
+        return "explore";
+    }
+
+    @GetMapping("/admin/dashboard")
+    public String afficherAdminDashboard() {
+        return "admin/dashboard";
+    }
 }

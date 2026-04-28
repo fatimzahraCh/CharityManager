@@ -36,7 +36,7 @@ public class Organisation {
 
     // Lien OneToOne avec l'utilisateur qui a créé le compte de l'organisation
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 

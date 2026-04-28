@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<body>
+
+<div layout:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <nav aria-label="breadcrumb" class="mb-3">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/actions/dashboard}">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Lancer une action</li>
+                </ol>
+            </nav>
+
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="row g-0">
+                    <div class="col-md-4 bg-primary text-white p-5 d-flex flex-column justify-content-center">
+                        <i class="bi bi-megaphone display-4 mb-3"></i>
+                        <h4 class="fw-bold">Nouvelle Campagne</h4>
+                        <p class="opacity-75">Décrivez votre projet avec précision pour inspirer confiance aux donateurs de CharityConnect.</p>
+                        <hr class="opacity-25 my-4">
+                        <div class="small">
+                            <p><i class="bi bi-check2-circle me-2"></i> Objectif clair</p>
+                            <p><i class="bi bi-check2-circle me-2"></i> Lieu défini</p>
+                            <p><i class="bi bi-check2-circle me-2"></i> Transparence totale</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8 p-5 bg-white">
+                        <form th:action="@{/actions/save}" th:object="${action}" method="post">
+                            <div class="mb-4">
+                                <label class="form-label fw-bold text-secondary small">TITRE DU PROJET</label>
+                                <input type="text" th:field="*{titre}" class="form-control form-control-lg border-0 bg-light rounded-3" placeholder="Ex: Soutien scolaire pour les enfants ruraux" required>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-bold text-secondary small">DESCRIPTION DÉTAILLÉE</label>
+                                <textarea th:field="*{description}" class="form-control border-0 bg-light rounded-3" rows="5" placeholder="Expliquez ici l'urgence et l'utilisation des fonds..." required></textarea>
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold text-secondary small">OBJECTIF (DH)</label>
+                                    <input type="number" th:field="*{objectifCollecte}" class="form-control border-0 bg-light rounded-3" placeholder="5000" min="100" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold text-secondary small">LIEU DE L'ACTION</label>
+                                    <input type="text" th:field="*{lieu}" class="form-control border-0 bg-light rounded-3" placeholder="Ex: Région d'Al Haouz" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-5">
+                                <label class="form-label fw-bold text-secondary small">CATÉGORIE</label>
+                                <select th:field="*{categorie}" class="form-select border-0 bg-light rounded-3" required>
+                                    <option value="SANTÉ">Santé & Médical</option>
+                                    <option value="ÉDUCATION">Éducation & Formation</option>
+                                    <option value="ALIMENTATION">Aide Alimentaire</option>
+                                    <option value="URGENCE">Urgence Humanitaire</option>
+                                </select>
+                            </div>
+
+                            <div class="d-flex gap-3">
+                                <button type="submit" class="btn btn-primary px-5 py-3 rounded-3 fw-bold flex-grow-1">
+                                    PUBLIER LA CAMPAGNE
+                                </button>
+                                <a th:href="@{/actions/dashboard}" class="btn btn-light px-4 py-3 rounded-3 fw-bold">Annuler</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Admin Dashboard</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section class="card-glass p-4 p-lg-5 mb-5">
+        <div class="d-flex flex-column flex-md-row align-items-start justify-content-between gap-3 mb-4">
+            <div>
+                <p class="text-uppercase small tracking-[0.35em] text-brand-soft mb-2">Administration</p>
+                <h1 class="fw-bold">Pending Verifications</h1>
+                <p class="text-muted">Gérez les organisations en attente et suivez l’état de santé du système.</p>
+            </div>
+            <div class="rounded-pill border border-brand-soft px-4 py-2 text-brand-soft">Vue d’administration</div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6 col-xl-3">
+                <div class="card-glass p-4 h-100">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <i class="bi bi-shield-check fs-3 text-brand"></i>
+                        <div>
+                            <p class="small text-uppercase tracking-[0.35em] text-brand-soft mb-1">Validation</p>
+                            <h3 class="fw-semibold mb-0">12 en attente</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card-glass p-4 h-100">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <i class="bi bi-bar-chart-line-fill fs-3 text-brand-soft"></i>
+                        <div>
+                            <p class="small text-uppercase tracking-[0.35em] text-brand-soft mb-1">Conformité</p>
+                            <h3 class="fw-semibold mb-0">94%</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card-glass p-4 h-100">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <i class="bi bi-people-fill fs-3 text-brand"></i>
+                        <div>
+                            <p class="small text-uppercase tracking-[0.35em] text-brand-soft mb-1">Donateurs</p>
+                            <h3 class="fw-semibold mb-0">14.2k</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card-glass p-4 h-100">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <i class="bi bi-heart-pulse-fill fs-3 text-danger"></i>
+                        <div>
+                            <p class="small text-uppercase tracking-[0.35em] text-brand-soft mb-1">Vérifications</p>
+                            <h3 class="fw-semibold mb-0">8.6k</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="row g-4">
+        <div class="col-lg-4">
+            <div class="card-glass p-4 h-100">
+                <h2 class="h5 fw-semibold">Rayon de Vie</h2>
+                <p class="text-muted mb-3">Urgence humanitaire</p>
+                <span class="badge rounded-pill bg-warning text-dark">En attente</span>
+                <div class="mt-4">
+                    <p class="mb-1 small text-uppercase tracking-[0.35em] text-brand-soft">Santé du profil</p>
+                    <p class="fw-semibold">78%</p>
+                </div>
+                <a href="#" class="btn btn-brand btn-sm mt-3">Valider</a>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card-glass p-4 h-100">
+                <h2 class="h5 fw-semibold">Solidarité Atlas</h2>
+                <p class="text-muted mb-3">Éducation</p>
+                <span class="badge rounded-pill bg-warning text-dark">En attente</span>
+                <div class="mt-4">
+                    <p class="mb-1 small text-uppercase tracking-[0.35em] text-brand-soft">Santé du profil</p>
+                    <p class="fw-semibold">86%</p>
+                </div>
+                <a href="#" class="btn btn-brand btn-sm mt-3">Valider</a>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card-glass p-4 h-100">
+                <h2 class="h5 fw-semibold">Coeur du Sahara</h2>
+                <p class="text-muted mb-3">Santé</p>
+                <span class="badge rounded-pill bg-warning text-dark">En attente</span>
+                <div class="mt-4">
+                    <p class="mb-1 small text-uppercase tracking-[0.35em] text-brand-soft">Santé du profil</p>
+                    <p class="fw-semibold">92%</p>
+                </div>
+                <a href="#" class="btn btn-brand btn-sm mt-3">Valider</a>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

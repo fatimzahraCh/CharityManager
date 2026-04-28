@@ -15,28 +15,51 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
+                .csrf(csrf -> csrf
+                        // On ignore le CSRF pour les APIs (Postman)
+                        // ET pour les routes de gestion d'actions si nécessaire pour tes tests
+                        .ignoringRequestMatchers("/api/**", "/actions/**")
+                )
                 .authorizeHttpRequests(auth -> auth
-                        // On ne laisse TOUT PUBLIC que la page de login et les ressources statiques
-                        // Sinon, l'utilisateur ne pourra même pas voir le design de la page de login !
-                        .requestMatchers("/login", "/register", "/css/**", "/js/**").permitAll()
-                        // Tout le reste (y compris "/") demande maintenant d'être connecté
+                        // 1. Ressources Statiques et Auth
+                        .requestMatchers("/", "/explore", "/login", "/register", "/css/**", "/js/**", "/images/**").permitAll()
+
+                        // 2. Accès Public API
+                        .requestMatchers("/api/**").permitAll()
+
+                        // 3. Accès Restreint : Seules les Organisations peuvent créer/gérer
+                        .requestMatchers("/actions/creer", "/actions/save", "/actions/dashboard").hasRole("ORGANISATION")
+
+                        // 4. Accès Admin
+                        .requestMatchers("/admin/dashboard").hasRole("ADMIN")
+
+                        // 5. Par défaut : Authentification requise
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/", true) // Une fois connecté, on arrive sur l'accueil
+                        // REDIRECTION INTELLIGENTE :
+                        .successHandler((request, response, authentication) -> {
+                            var roles = authentication.getAuthorities();
+                            boolean isOrga = roles.stream()
+                                    .anyMatch(r -> r.getAuthority().equals("ROLE_ORGANISATION"));
+
+                            if (isOrga) {
+                                response.sendRedirect("/actions/dashboard");
+                            } else {
+                                response.sendRedirect("/");
+                            }
+                        })
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/login?logout") // Redirige vers login après déconnexion
+                        .logoutSuccessUrl("/login?logout")
                         .permitAll()
                 );
 
         return http.build();
     }
 
-    // Le moteur de cryptage des mots de passe
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

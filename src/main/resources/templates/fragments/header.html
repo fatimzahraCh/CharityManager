@@ -1,12 +1,61 @@
-<div th:fragment="navbar">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" th:href="@{/static}">CharityConnect</a>
-            <div class="navbar-nav">
-                <a class="nav-link" th:href="@{/api/actions/liste}">Actions</a>
-                <a class="nav-link" th:href="@{/login}">Connexion</a>
-                <a class="nav-link btn btn-success text-white ms-lg-3" th:href="@{/register}">S'inscrire</a>
+<div xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:fragment="navbar">
+    <header class="sticky-top z-50 border-bottom border-slate-200/80 bg-white/90 backdrop-blur-xl">
+        <div class="mx-auto d-flex max-w-7xl align-items-center justify-content-between px-4 py-4">
+            <div class="d-flex align-items-center gap-3">
+                <div class="d-flex h-12 w-12 align-items-center justify-content-center rounded-3xl bg-brand text-white shadow-soft">
+                    <i class="bi bi-heart-fill fs-4"></i>
+                </div>
+                <div>
+                    <p class="text-uppercase small tracking-[0.35em] text-brand-soft mb-1">CharityConnect</p>
+                    <p class="fw-semibold mb-0">Morocco</p>
+                </div>
+            </div>
+
+            <nav class="d-none d-md-flex align-items-center gap-4">
+                <a class="text-decoration-none text-muted fw-semibold" th:href="@{/}">Accueil</a>
+                <a class="text-decoration-none text-muted fw-semibold" th:href="@{/explore}">Explorer</a>
+                <a class="text-decoration-none text-muted fw-semibold" th:href="@{/actions/dashboard}" sec:authorize="hasRole('ORGANISATION')">Impact</a>
+                <a class="text-decoration-none text-muted fw-semibold" th:href="@{/admin/dashboard}" sec:authorize="hasRole('ADMIN')">Admin</a>
+            </nav>
+
+            <div class="d-none d-md-flex align-items-center gap-3">
+                <a th:href="@{/login}" sec:authorize="isAnonymous()" class="text-decoration-none text-muted fw-semibold">Connexion</a>
+                <a th:href="@{/register}" sec:authorize="isAnonymous()" class="btn btn-brand btn-sm">S'inscrire</a>
+                <div class="dropdown" sec:authorize="isAuthenticated()">
+                    <a class="d-flex align-items-center gap-2 btn btn-outline-secondary btn-sm dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <span class="rounded-pill bg-brand-100 px-3 py-2 text-brand-soft" th:text="${#authentication.name}">Utilisateur</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <form th:action="@{/logout}" method="post" class="m-0 px-3 py-2">
+                                <button type="submit" class="btn btn-sm btn-outline-danger w-100">Déconnexion</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </nav>
+
+        <div class="d-md-none fixed-bottom inset-x-0 z-40 border-top border-slate-200/80 bg-white/95 p-3 shadow-soft">
+            <div class="d-flex justify-content-between mx-auto" style="max-width: 600px;">
+                <a th:href="@{/}" class="text-center text-decoration-none text-slate-700">
+                    <i class="bi bi-house-door-fill fs-5"></i>
+                    <div class="small mt-1">Accueil</div>
+                </a>
+                <a th:href="@{/explore}" class="text-center text-decoration-none text-slate-700">
+                    <i class="bi bi-search fs-5"></i>
+                    <div class="small mt-1">Explorer</div>
+                </a>
+                <a th:href="@{/actions/dashboard}" sec:authorize="hasRole('ORGANISATION')" class="text-center text-decoration-none text-slate-700">
+                    <i class="bi bi-graph-up-arrow fs-5"></i>
+                    <div class="small mt-1">Impact</div>
+                </a>
+                <a th:href="@{/admin/dashboard}" sec:authorize="hasRole('ADMIN')" class="text-center text-decoration-none text-slate-700">
+                    <i class="bi bi-shield-check fs-5"></i>
+                    <div class="small mt-1">Admin</div>
+                </a>
+            </div>
+        </div>
+        <div class="mobile-nav-spacer d-md-none"></div>
+    </header>
 </div>

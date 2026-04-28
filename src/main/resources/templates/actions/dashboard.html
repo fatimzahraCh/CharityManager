@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="row g-4">
+        <div class="col-xl-3">
+            <aside class="card-glass h-100 p-4">
+                <div class="mb-4">
+                    <p class="text-uppercase small tracking-[0.35em] text-brand-soft mb-2">Organisation</p>
+                    <h2 class="h4 fw-bold mb-0">Tableau de bord</h2>
+                </div>
+                <p class="text-muted">Suivez vos campagnes, vos dons et votre validation en un seul endroit.</p>
+                <div class="mt-5">
+                    <a th:href="@{/actions/creer}" class="d-block rounded-pill btn btn-brand py-2 text-center mb-3">Nouvelle action</a>
+                    <a th:href="@{/admin/dashboard}" sec:authorize="hasRole('ADMIN')" class="d-block rounded-pill btn btn-outline-secondary py-2 text-center">Accéder à admin</a>
+                </div>
+            </aside>
+        </div>
+        <div class="col-xl-9">
+            <div class="row g-4 mb-4">
+                <div class="col-md-4">
+                    <div class="card-glass p-4 h-100">
+                        <p class="text-uppercase small tracking-[0.35em] text-brand-soft">Actions publiées</p>
+                        <p class="display-6 fw-bold mb-0" th:text="${actions.size()}">0</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card-glass p-4 h-100">
+                        <p class="text-uppercase small tracking-[0.35em] text-brand-soft">Total récolté</p>
+                        <p class="display-6 fw-bold mb-0 text-brand-soft">0 MAD</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card-glass p-4 h-100">
+                        <p class="text-uppercase small tracking-[0.35em] text-brand-soft">Statut profil</p>
+                        <span th:if="${organisation.validated}" class="badge rounded-pill bg-brand text-white">Vérifié</span>
+                        <span th:unless="${organisation.validated}" class="badge rounded-pill bg-warning text-dark">En attente</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-glass p-4">
+                <div class="d-flex flex-column flex-md-row align-items-start justify-content-between gap-3 mb-4">
+                    <div>
+                        <p class="text-uppercase small tracking-[0.35em] text-brand-soft mb-2">Dernières publications</p>
+                        <h3 class="fw-bold mb-0">Mes actions récentes</h3>
+                    </div>
+                    <a th:href="@{/actions/creer}" class="btn btn-outline-secondary btn-sm">Publier une action</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Action</th>
+                            <th>Objectif</th>
+                            <th>Collecté</th>
+                            <th>Statut</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="action : ${actions}">
+                            <td>
+                                <div class="fw-semibold" th:text="${action.titre}">Titre</div>
+                                <small class="text-muted" th:text="${action.categorie}">Catégorie</small>
+                            </td>
+                            <td th:text="${action.objectifCollecte + ' MAD'}">0 MAD</td>
+                            <td>
+                                <div class="progress rounded-pill" style="height: 8px; min-width: 180px;">
+                                    <div class="progress-bar bg-brand" role="progressbar"
+                                         th:style="'width: ' + ${action.objectifCollecte > 0 ? (action.sommeActuelle * 100 / action.objectifCollecte) : 0} + '%'"
+                                         th:text="${action.objectifCollecte > 0 ? (action.sommeActuelle * 100 / action.objectifCollecte) : 0} + '%'">0%</div>
+                                </div>
+                            </td>
+                            <td>
+                                <span th:if="${!action.archived}" class="badge rounded-pill bg-brand text-white">Actif</span>
+                                <span th:if="${action.archived}" class="badge rounded-pill bg-secondary text-white">Archivé</span>
+                            </td>
+                        </tr>
+                        <tr th:if="${actions.isEmpty()}">
+                            <td colspan="4" class="text-center py-5 text-muted">Vous n'avez pas encore publié d'actions.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

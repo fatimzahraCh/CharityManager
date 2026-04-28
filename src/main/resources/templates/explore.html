@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Explorer</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section class="card-glass p-4 p-lg-5 mb-5">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <p class="text-uppercase small tracking-[0.35em] text-brand-soft mb-2">Explorer</p>
+                <h1 class="display-6 fw-bold">Trouvez des campagnes à fort impact au Maroc</h1>
+                <p class="text-muted">Filtrez par secteur, date et urgence pour soutenir les projets qui correspondent à vos valeurs.</p>
+            </div>
+            <div class="col-lg-5">
+                <div class="rounded-4xl bg-brand-900 text-white p-4 shadow-soft">
+                    <p class="text-uppercase small tracking-[0.35em] text-brand-100 opacity-75 mb-3">Recherche</p>
+                    <div class="input-group mb-3 rounded-pill overflow-hidden border border-white/20 bg-white bg-opacity-10">
+                        <span class="input-group-text bg-transparent border-0 text-white"><i class="bi bi-search"></i></span>
+                        <input type="search" class="form-control border-0 bg-transparent text-white" placeholder="Campagne, région, cause" aria-label="Rechercher">
+                    </div>
+                    <div class="mt-4 d-flex flex-wrap gap-2">
+                        <span class="badge rounded-pill bg-white text-brand-900 px-3 py-2">Éducation</span>
+                        <span class="badge rounded-pill bg-white text-brand-900 px-3 py-2">Santé</span>
+                        <span class="badge rounded-pill bg-white text-danger px-3 py-2">Secours d'urgence</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-5">
+        <div class="d-flex flex-column flex-md-row align-items-start justify-content-between gap-3 mb-4">
+            <div>
+                <p class="text-uppercase small tracking-[0.35em] text-brand-soft mb-2">Filtres rapides</p>
+                <h2 class="fw-bold">Choisissez votre cause</h2>
+            </div>
+            <button class="btn btn-brand btn-sm">Options avancées</button>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card-glass p-4 h-100">
+                    <p class="text-uppercase small tracking-[0.35em] text-brand-soft mb-2">Education</p>
+                    <h3 class="h5 fw-semibold">Soutien scolaire</h3>
+                    <p class="text-muted">Aidez les élèves des petites villes à rester à l'école.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card-glass p-4 h-100">
+                    <p class="text-uppercase small tracking-[0.35em] text-brand-soft mb-2">Santé</p>
+                    <h3 class="h5 fw-semibold">Cliniques mobiles</h3>
+                    <p class="text-muted">Financez les tournées médicales dans les zones rurales.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card-glass p-4 h-100">
+                    <p class="text-uppercase small tracking-[0.35em] text-brand-soft mb-2">Urgences</p>
+                    <h3 class="h5 fw-semibold">Réponse rapide</h3>
+                    <p class="text-muted">Soutien prioritaire pour les crises et catastrophes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="d-flex flex-column flex-md-row align-items-start justify-content-between gap-3 mb-4">
+            <div>
+                <p class="text-uppercase small tracking-[0.35em] text-brand-soft mb-2">Campagnes</p>
+                <h2 class="fw-bold">Projets à soutenir dès maintenant</h2>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="card-glass overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=80" alt="Campagne A" class="img-fluid" style="aspect-ratio: 16/9; object-fit: cover;">
+                    <div class="p-4">
+                        <span class="badge rounded-pill bg-brand text-white mb-3">Éducation</span>
+                        <h3 class="h5 fw-semibold">Bibliothèque communautaire</h3>
+                        <p class="text-muted mb-3">Créer un espace d'étude sûr pour les jeunes.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="small text-muted">45% financé</span>
+                            <span class="badge rounded-pill bg-brand-soft text-white">Verified</span>
+                        </div>
+                        <div class="progress rounded-pill mt-3" style="height: 8px;">
+                            <div class="progress-bar bg-brand" role="progressbar" style="width: 45%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card-glass overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=900&q=80" alt="Campagne B" class="img-fluid" style="aspect-ratio: 16/9; object-fit: cover;">
+                    <div class="p-4">
+                        <span class="badge rounded-pill bg-brand text-white mb-3">Santé</span>
+                        <h3 class="h5 fw-semibold">Tournée médicale</h3>
+                        <p class="text-muted mb-3">Mener des consultations gratuites au village.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="small text-muted">62% financé</span>
+                            <span class="badge rounded-pill bg-brand-soft text-white">Verified</span>
+                        </div>
+                        <div class="progress rounded-pill mt-3" style="height: 8px;">
+                            <div class="progress-bar bg-brand" role="progressbar" style="width: 62%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card-glass overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=900&q=80" alt="Campagne C" class="img-fluid" style="aspect-ratio: 16/9; object-fit: cover;">
+                    <div class="p-4">
+                        <span class="badge rounded-pill bg-danger text-white mb-3">Urgences</span>
+                        <h3 class="h5 fw-semibold">Aide post-inondation</h3>
+                        <p class="text-muted mb-3">Fournir des kits de première nécessité en urgence.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="small text-muted">88% financé</span>
+                            <span class="badge rounded-pill bg-danger text-white">Urgent</span>
+                        </div>
+                        <div class="progress rounded-pill mt-3" style="height: 8px;">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 88%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

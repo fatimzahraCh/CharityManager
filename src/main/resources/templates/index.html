@@ -3,16 +3,138 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
 <head>
-    <title>Accueil</title>
+    <title>CharityConnect Morocco</title>
 </head>
 <body>
 <div layout:fragment="content">
-    <div class="jumbotron text-center">
-        <h1>Bienvenue sur CharityConnect</h1>
-        <p class="lead">Aidez-nous à changer le monde, un don à la fois.</p>
-        <hr class="my-4">
-        <a class="btn btn-primary btn-lg" href="/api/actions/liste" role="button">Voir les actions</a>
-    </div>
+    <section class="position-relative overflow-hidden rounded-4xl card-glass p-5 p-lg-6 mb-6">
+        <div class="hero-glow" style="width: 240px; height: 240px; top: -80px; left: -80px; background: rgba(0, 53, 95, 0.2);"></div>
+        <div class="hero-glow" style="width: 220px; height: 220px; bottom: -70px; right: -70px; background: rgba(0, 107, 90, 0.22);"></div>
+        <div class="row align-items-center gx-5">
+            <div class="col-lg-6">
+                <p class="text-uppercase small tracking-[0.35em] text-brand-soft">Solidarité marocaine</p>
+                <h1 class="mt-3 mb-4 display-6 fw-bold text-slate-950">Empowering Communities, Transforming Lives in Morocco</h1>
+                <p class="mb-4 text-muted">Une plateforme moderne qui connecte donateurs et associations pour des projets solidaires, transparents et durables dans tout le Maroc.</p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a th:href="@{/explore}" class="btn btn-brand px-4 py-3">Explorer les campagnes</a>
+                    <a th:href="@{/actions/dashboard}" class="btn btn-outline-secondary px-4 py-3">Tableau Organisation</a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="rounded-4xl bg-brand text-white p-5 shadow-soft">
+                    <p class="text-uppercase small tracking-[0.35em] text-brand-100 opacity-80">Projet phare</p>
+                    <h2 class="mt-3 mb-3 fw-semibold">Soutien scolaire rural</h2>
+                    <p class="mb-4 text-slate-100">Accompagner les enfants des zones rurales avec des fournitures, des cours et des formations pédagogiques.</p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <span class="badge rounded-pill bg-white text-brand">Éducation</span>
+                        <span class="badge rounded-pill bg-white text-brand">Transparence</span>
+                        <span class="badge rounded-pill bg-white text-brand">Impact local</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-6">
+        <div class="d-flex flex-column flex-md-row align-items-start justify-content-between gap-3 mb-4">
+            <div>
+                <p class="text-uppercase small tracking-[0.35em] text-brand-soft">Zones d’impact</p>
+                <h2 class="mt-2 fw-bold">Des axes d’action adaptés au Maroc</h2>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card-glass p-4 h-100">
+                    <div class="mb-3 rounded-4xl bg-brand-900/10 p-3 text-brand-900 d-inline-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
+                        <i class="bi bi-book-half fs-4"></i>
+                    </div>
+                    <h3 class="fw-semibold">Éducation</h3>
+                    <p class="text-muted">Renforcer les structures scolaires et l’accès à la connaissance dans les régions isolées.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card-glass p-4 h-100">
+                    <div class="mb-3 rounded-4xl bg-brand-soft/10 p-3 text-brand-soft d-inline-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
+                        <i class="bi bi-heart-pulse fs-4"></i>
+                    </div>
+                    <h3 class="fw-semibold">Santé</h3>
+                    <p class="text-muted">Soutenir les campagnes médicales mobiles et les structures de santé de proximité.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card-glass p-4 h-100">
+                    <div class="mb-3 rounded-4xl bg-danger/10 p-3 text-danger d-inline-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
+                        <i class="bi bi-lightning-charge-fill fs-4"></i>
+                    </div>
+                    <h3 class="fw-semibold">Urgences</h3>
+                    <p class="text-muted">Réagir vite aux catastrophes naturelles et aux crises locales grâce à des collectes ciblées.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="d-flex flex-column flex-md-row align-items-start justify-content-between gap-3 mb-4">
+            <div>
+                <p class="text-uppercase small tracking-[0.35em] text-brand-soft">Campagnes en vedette</p>
+                <h2 class="mt-2 fw-bold">Contribuez à des projets concrets</h2>
+            </div>
+            <a th:href="@{/explore}" class="btn btn-outline-secondary px-4 py-3">Voir toutes les campagnes</a>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="card-glass overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=900&q=80" alt="Campagne éducation" class="img-fluid" style="aspect-ratio: 16/9; object-fit: cover;">
+                    <div class="p-4">
+                        <span class="badge rounded-pill bg-brand text-white mb-3">Éducation</span>
+                        <h3 class="h5 fw-semibold">Collège rural pour filles</h3>
+                        <p class="text-muted mb-3">Un projet pour améliorer l’accès à l’école et réduire les inégalités.</p>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="text-muted small">640k MAD collectés</span>
+                            <span class="badge rounded-pill bg-brand-soft text-white">Vérifié</span>
+                        </div>
+                        <div class="progress rounded-pill mt-3" style="height: 10px;">
+                            <div class="progress-bar bg-brand" role="progressbar" style="width: 68%;" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card-glass overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?auto=format&fit=crop&w=900&q=80" alt="Campagne santé" class="img-fluid" style="aspect-ratio: 16/9; object-fit: cover;">
+                    <div class="p-4">
+                        <span class="badge rounded-pill bg-brand text-white mb-3">Santé</span>
+                        <h3 class="h5 fw-semibold">Cliniques mobiles</h3>
+                        <p class="text-muted mb-3">Soins médicaux pour les villages isolés pendant la saison hivernale.</p>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="text-muted small">520k MAD collectés</span>
+                            <span class="badge rounded-pill bg-brand-soft text-white">Vérifié</span>
+                        </div>
+                        <div class="progress rounded-pill mt-3" style="height: 10px;">
+                            <div class="progress-bar bg-brand" role="progressbar" style="width: 53%;" aria-valuenow="53" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card-glass overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1518183214770-9cffbec72538?auto=format&fit=crop&w=900&q=80" alt="Campagne urgence" class="img-fluid" style="aspect-ratio: 16/9; object-fit: cover;">
+                    <div class="p-4">
+                        <span class="badge rounded-pill bg-danger text-white mb-3">Urgences</span>
+                        <h3 class="h5 fw-semibold">Aide post-inondations</h3>
+                        <p class="text-muted mb-3">Réhabilitation rapide des familles touchées par les intempéries.</p>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="text-muted small">720k MAD collectés</span>
+                            <span class="badge rounded-pill bg-brand text-white">Vérifié</span>
+                        </div>
+                        <div class="progress rounded-pill mt-3" style="height: 10px;">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 88%;" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
 </body>
 </html>

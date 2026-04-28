@@ -5,6 +5,7 @@ import com.example.CharityProject.entities.Organisation;
 import com.example.CharityProject.repositories.ActionChariteRepository;
 import com.example.CharityProject.repositories.OrganisationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,38 +20,29 @@ public class ActionChariteService {
     private final OrganisationRepository organisationRepository;
 
     @Transactional
-    public ActionCharite creerAction(ActionCharite action, Long organisationId) {
-        Organisation orga = organisationRepository.findById(organisationId)
-                .orElseThrow(() -> new RuntimeException("Organisation introuvable."));
+    public ActionCharite creerActionDepuisSession(ActionCharite action) {
+        // Récupération sécurisée de l'identité connectée
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        // Sécurité métier : Une organisation non validée ne peut pas créer d'action
+        Organisation orga = organisationRepository.findByUserEmail(email)
+                .orElseThrow(() -> new RuntimeException("Profil Organisation introuvable pour : " + email));
+
         if (!orga.isValidated()) {
-            throw new RuntimeException("Votre organisation doit être validée par l'administrateur avant de publier une action.");
+            throw new RuntimeException("Action refusée : Votre organisation n'est pas encore validée.");
         }
 
+        // Hydratation automatique des champs protégés
         action.setOrganisation(orga);
         action.setDateAction(LocalDateTime.now());
-        action.setSommeActuelle(0.0); // La cagnotte commence à 0
+        action.setSommeActuelle(0.0);
         action.setArchived(false);
 
         return actionRepository.save(action);
     }
 
-    // Fonctionnalité d'exploration : Filtrer par catégorie (Santé, Éducation...)
-    public List<ActionCharite> filtrerParCategorie(String categorie) {
-        return actionRepository.findByCategorie(categorie);
-    }
-
-    public ActionCharite archiverAction(Long actionId) {
-        ActionCharite action = actionRepository.findById(actionId)
-                .orElseThrow(() -> new RuntimeException("Action introuvable."));
-        action.setArchived(true);
-        return actionRepository.save(action);
-    }
-
-
-    public List<ActionCharite> obtenirActionsActives() {
-        return actionRepository.findByIsArchivedFalse();
+    // Utilisé par le Dashboard pour n'afficher que les publications de l'orga
+    public List<ActionCharite> obtenirActionsParOrganisation(Organisation orga) {
+        return actionRepository.findByOrganisation(orga);
     }
 
     public List<ActionCharite> obtenirToutesLesActions() {

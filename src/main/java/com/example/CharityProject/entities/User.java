@@ -11,7 +11,7 @@ import java.util.List;
 @Table(name = "users") // CRITIQUE POUR POSTGRESQL : "user" est un mot réservé
 @Data // Génère Getters, Setters, toString, etc.
 @NoArgsConstructor // Constructeur vide requis par JPA
-@AllArgsConstructor // Constructeur avec tous les arguments
+@AllArgsConstructor
 
 public class User {
 
