@@ -16,7 +16,7 @@
 
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
                 <div class="row g-0">
-                    <div class="col-md-4 bg-primary text-white p-5 d-flex flex-column justify-content-center">
+                    <div class="col-md-4 bg-brand text-white p-5 d-flex flex-column justify-content-center">
                         <i class="bi bi-megaphone display-4 mb-3"></i>
                         <h4 class="fw-bold">Nouvelle Campagne</h4>
                         <p class="opacity-75">Décrivez votre projet avec précision pour inspirer confiance aux donateurs de CharityConnect.</p>
@@ -29,7 +29,9 @@
                     </div>
 
                     <div class="col-md-8 p-5 bg-white">
-                        <form th:action="@{/actions/save}" th:object="${action}" method="post">
+                        <form th:action="@{/actions/save}" th:object="${action}" method="post" enctype="multipart/form-data">
+                            <input type="hidden" th:field="*{id}">
+                            <input type="hidden" th:field="*{imageUrl}">
                             <div class="mb-4">
                                 <label class="form-label fw-bold text-secondary small">TITRE DU PROJET</label>
                                 <input type="text" th:field="*{titre}" class="form-control form-control-lg border-0 bg-light rounded-3" placeholder="Ex: Soutien scolaire pour les enfants ruraux" required>
@@ -51,6 +53,12 @@
                                 </div>
                             </div>
 
+                            <div class="mb-4">
+                                <label class="form-label fw-bold text-secondary small">IMAGE DE LA CAMPAGNE</label>
+                                <input type="file" name="imageFile" class="form-control border-0 bg-light rounded-3">
+                                <div class="form-text">Téléchargez une image depuis votre ordinateur pour représenter votre action.</div>
+                            </div>
+
                             <div class="mb-5">
                                 <label class="form-label fw-bold text-secondary small">CATÉGORIE</label>
                                 <select th:field="*{categorie}" class="form-select border-0 bg-light rounded-3" required>
@@ -62,9 +70,7 @@
                             </div>
 
                             <div class="d-flex gap-3">
-                                <button type="submit" class="btn btn-primary px-5 py-3 rounded-3 fw-bold flex-grow-1">
-                                    PUBLIER LA CAMPAGNE
-                                </button>
+                                <button type="submit" class="btn btn-brand px-5 py-3 rounded-3 fw-bold flex-grow-1" th:text="${action.id != null} ? 'Mettre à jour la campagne' : 'PUBLIER LA CAMPAGNE'">PUBLIER LA CAMPAGNE</button>
                                 <a th:href="@{/actions/dashboard}" class="btn btn-light px-4 py-3 rounded-3 fw-bold">Annuler</a>
                             </div>
                         </form>

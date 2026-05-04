@@ -34,6 +34,8 @@ public class ActionCharite {
 
     private String categorie;
 
+    private String imageUrl;
+
     private boolean isArchived = false;
 
     // Astuce PostgreSQL : @ElementCollection permet de stocker une liste de chaînes
@@ -42,6 +44,9 @@ public class ActionCharite {
     @CollectionTable(name = "action_medias", joinColumns = @JoinColumn(name = "action_id"))
     @Column(name = "media_url")
     private List<String> mediaUrls;
+
+    @Transient
+    private Integer publishedActionsCountByOrganisation;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organisation_id", nullable = false)

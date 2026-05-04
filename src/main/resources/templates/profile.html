@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout}">
+<head>
+    <title>Profil Donateur</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section class="card-glass p-4 p-lg-5 mb-5" sec:authorize="hasAnyRole('USER','ORGANISATION')">
+        <div class="d-flex flex-column flex-md-row align-items-start justify-content-between gap-4">
+            <div>
+                <p class="text-uppercase small tracking-[0.35em] text-brand-soft mb-2">Mon profil</p>
+                <h1 class="display-6 fw-bold">Bienvenue sur votre espace donateur</h1>
+                <p class="text-muted">Retrouvez ici les campagnes en cours et votre historique de dons.</p>
+            </div>
+            <div class="text-end">
+                <a class="btn btn-brand" th:href="@{/}">Accueil</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-5" sec:authorize="hasAnyRole('USER','ORGANISATION')">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+                <p class="text-uppercase small tracking-[0.35em] text-brand-soft mb-2">Campagnes recommandées</p>
+                <h2 class="fw-bold">Actions publiées par les organisations</h2>
+                <p class="text-muted mb-0">Cliquez sur une action pour choisir de participer et donner de l'argent.</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-4" th:each="action : ${actions}">
+                <a th:href="@{/actions/detail/{id}(id=${action.id})}" class="text-decoration-none text-reset d-block h-100">
+                    <div class="card-glass overflow-hidden h-100">
+                        <img th:src="${action.imageUrl != null && !#strings.isEmpty(action.imageUrl) ? action.imageUrl : (#lists.isEmpty(action.mediaUrls) ? 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=900&q=80' : action.mediaUrls[0])}"
+                             alt="Campagne"
+                             class="img-fluid"
+                             style="aspect-ratio: 16/9; object-fit: cover;">
+                        <div class="p-4 d-flex flex-column h-100">
+                        <div>
+                            <span class="badge rounded-pill bg-brand text-white mb-3" th:text="${action.categorie != null ? action.categorie : 'Solidarité'}">Catégorie</span>
+                            <h3 class="h5 fw-semibold" th:text="${action.titre}">Titre de l'action</h3>
+                            <p class="text-muted mb-3" th:text="${action.description}">Description de l'action.</p>
+                        </div>
+                        <div class="mt-auto">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div>
+                                    <small class="text-muted d-block" th:text="${action.organisation != null ? action.organisation.nom : 'Organisation'}">Organisation</small>
+                                    <small class="text-muted" th:text="${action.publishedActionsCountByOrganisation} + ' actions publiées'">0 actions publiées</small>
+                                </div>
+                                <small class="text-muted" th:text="${action.sommeActuelle} + ' / ' + action.objectifCollecte + ' MAD'">0 / 0 MAD</small>
+                            </div>
+                            <div class="progress rounded-pill" style="height: 10px;">
+                                <div class="progress-bar bg-brand" role="progressbar"
+                                     th:style="|width: ${action.objectifCollecte != null && action.objectifCollecte > 0 ? (action.sommeActuelle / action.objectifCollecte * 100) : 0}%|">
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="btn btn-brand btn-sm">Participer</span>
+                                <span class="badge rounded-pill bg-brand-soft text-white" th:text="${action.organisation != null && action.organisation.validated ? 'Vérifié' : 'En attente'}">Statut</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            </div>
+            <div class="col-12" th:if="${#lists.isEmpty(actions)}">
+                <div class="card-glass p-4 text-center text-muted">
+                    <p>Aucune campagne disponible pour le moment.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-5" sec:authorize="hasAnyRole('USER','ORGANISATION')">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+                <p class="text-uppercase small tracking-[0.35em] text-brand-soft mb-2">Historique</p>
+                <h2 class="fw-bold">Mes dons</h2>
+            </div>
+        </div>
+
+        <div class="card-glass p-4">
+            <div th:if="${#lists.isEmpty(donations)}">
+                <p class="text-muted">Vous n'avez pas encore effectué de don.</p>
+            </div>
+            <div th:unless="${#lists.isEmpty(donations)}">
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Action</th>
+                                <th>Montant</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="don : ${donations}">
+                                <td th:text="${don.actionTitre}">Titre action</td>
+                                <td th:text="${don.montant} + ' MAD'">0 MAD</td>
+                                <td th:text="${#temporals.format(don.dateDon, 'dd/MM/yyyy HH:mm')}">JJ/MM/AAAA</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

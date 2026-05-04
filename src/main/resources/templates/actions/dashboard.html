@@ -23,19 +23,13 @@
         </div>
         <div class="col-xl-9">
             <div class="row g-4 mb-4">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="card-glass p-4 h-100">
                         <p class="text-uppercase small tracking-[0.35em] text-brand-soft">Actions publiées</p>
                         <p class="display-6 fw-bold mb-0" th:text="${actions.size()}">0</p>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card-glass p-4 h-100">
-                        <p class="text-uppercase small tracking-[0.35em] text-brand-soft">Total récolté</p>
-                        <p class="display-6 fw-bold mb-0 text-brand-soft">0 MAD</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="card-glass p-4 h-100">
                         <p class="text-uppercase small tracking-[0.35em] text-brand-soft">Statut profil</p>
                         <span th:if="${organisation.validated}" class="badge rounded-pill bg-brand text-white">Vérifié</span>
@@ -60,6 +54,7 @@
                             <th>Objectif</th>
                             <th>Collecté</th>
                             <th>Statut</th>
+                            <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -70,6 +65,7 @@
                             </td>
                             <td th:text="${action.objectifCollecte + ' MAD'}">0 MAD</td>
                             <td>
+                                <div class="fw-semibold mb-1" th:text="${action.sommeActuelle} + ' MAD'">0 MAD</div>
                                 <div class="progress rounded-pill" style="height: 8px; min-width: 180px;">
                                     <div class="progress-bar bg-brand" role="progressbar"
                                          th:style="'width: ' + ${action.objectifCollecte > 0 ? (action.sommeActuelle * 100 / action.objectifCollecte) : 0} + '%'"
@@ -78,7 +74,22 @@
                             </td>
                             <td>
                                 <span th:if="${!action.archived}" class="badge rounded-pill bg-brand text-white">Actif</span>
-                                <span th:if="${action.archived}" class="badge rounded-pill bg-secondary text-white">Archivé</span>
+                                <span th:if="${action.archived}" class="badge rounded-pill bg-secondary text-white">Inactif</span>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <a th:href="@{/actions/detail/{id}(id=${action.id})}" class="btn btn-outline-info btn-sm" title="Voir détails">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a th:href="@{/actions/editer/{id}(id=${action.id})}" class="btn btn-outline-secondary btn-sm" title="Modifier">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form th:action="@{/actions/supprimer/{id}(id=${action.id})}" method="post" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette action ? Cette action est irréversible.')">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm" title="Supprimer">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         <tr th:if="${actions.isEmpty()}">

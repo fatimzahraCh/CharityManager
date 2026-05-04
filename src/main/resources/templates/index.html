@@ -1,6 +1,8 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layout}">
 <head>
     <title>CharityConnect Morocco</title>
@@ -15,9 +17,15 @@
                 <p class="text-uppercase small tracking-[0.35em] text-brand-soft">Solidarité marocaine</p>
                 <h1 class="mt-3 mb-4 display-6 fw-bold text-slate-950">Empowering Communities, Transforming Lives in Morocco</h1>
                 <p class="mb-4 text-muted">Une plateforme moderne qui connecte donateurs et associations pour des projets solidaires, transparents et durables dans tout le Maroc.</p>
+                <form method="get" action="/" class="mb-4">
+                    <div class="input-group rounded-pill overflow-hidden border border-slate-200 bg-white">
+                        <span class="input-group-text bg-transparent border-0 text-brand"><i class="bi bi-search"></i></span>
+                        <input type="search" name="search" th:value="${search}" class="form-control border-0" placeholder="Campagne, région, cause" aria-label="Rechercher">
+                        <button type="submit" class="btn btn-brand px-4">Rechercher</button>
+                    </div>
+                </form>
                 <div class="d-flex flex-wrap gap-3">
-                    <a th:href="@{/explore}" class="btn btn-brand px-4 py-3">Explorer les campagnes</a>
-                    <a th:href="@{/actions/dashboard}" class="btn btn-outline-secondary px-4 py-3">Tableau Organisation</a>
+                    <a sec:authorize="hasRole('ORGANISATION')" th:href="@{/actions/dashboard}" class="btn btn-outline-secondary px-4 py-3">Tableau Organisation</a>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -79,58 +87,40 @@
                 <p class="text-uppercase small tracking-[0.35em] text-brand-soft">Campagnes en vedette</p>
                 <h2 class="mt-2 fw-bold">Contribuez à des projets concrets</h2>
             </div>
-            <a th:href="@{/explore}" class="btn btn-outline-secondary px-4 py-3">Voir toutes les campagnes</a>
         </div>
         <div class="row g-4">
-            <div class="col-lg-4">
-                <div class="card-glass overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=900&q=80" alt="Campagne éducation" class="img-fluid" style="aspect-ratio: 16/9; object-fit: cover;">
-                    <div class="p-4">
-                        <span class="badge rounded-pill bg-brand text-white mb-3">Éducation</span>
-                        <h3 class="h5 fw-semibold">Collège rural pour filles</h3>
-                        <p class="text-muted mb-3">Un projet pour améliorer l’accès à l’école et réduire les inégalités.</p>
-                        <div class="d-flex align-items-center justify-content-between">
-                            <span class="text-muted small">640k MAD collectés</span>
-                            <span class="badge rounded-pill bg-brand-soft text-white">Vérifié</span>
+            <div class="col-lg-4" th:each="action : ${actions}">
+                <div class="card-glass overflow-hidden h-100">
+                    <img th:src="${action.imageUrl != null && !#strings.isEmpty(action.imageUrl) ? action.imageUrl : (#lists.isEmpty(action.mediaUrls) ? 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=900&q=80' : action.mediaUrls[0])}"
+                         alt="Campagne" class="img-fluid" style="aspect-ratio: 16/9; object-fit: cover;">
+                    <div class="p-4 d-flex flex-column h-100">
+                        <div>
+                            <span class="badge rounded-pill bg-brand text-white mb-3" th:text="${action.categorie != null ? action.categorie : 'Solidarité'}">Catégorie</span>
+                            <h3 class="h5 fw-semibold mt-3" th:text="${action.titre}">Titre action</h3>
+                            <p class="text-muted mb-3" th:text="${action.description}">Description de l'action.</p>
                         </div>
-                        <div class="progress rounded-pill mt-3" style="height: 10px;">
-                            <div class="progress-bar bg-brand" role="progressbar" style="width: 68%;" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="card-glass overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?auto=format&fit=crop&w=900&q=80" alt="Campagne santé" class="img-fluid" style="aspect-ratio: 16/9; object-fit: cover;">
-                    <div class="p-4">
-                        <span class="badge rounded-pill bg-brand text-white mb-3">Santé</span>
-                        <h3 class="h5 fw-semibold">Cliniques mobiles</h3>
-                        <p class="text-muted mb-3">Soins médicaux pour les villages isolés pendant la saison hivernale.</p>
-                        <div class="d-flex align-items-center justify-content-between">
-                            <span class="text-muted small">520k MAD collectés</span>
-                            <span class="badge rounded-pill bg-brand-soft text-white">Vérifié</span>
-                        </div>
-                        <div class="progress rounded-pill mt-3" style="height: 10px;">
-                            <div class="progress-bar bg-brand" role="progressbar" style="width: 53%;" aria-valuenow="53" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="mt-auto">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <small class="text-muted" th:text="${action.organisation != null ? action.organisation.nom : 'Organisation'}">Organisation</small>
+                                <small class="text-muted" th:text="${action.sommeActuelle} + ' / ' + action.objectifCollecte + ' MAD'">0 / 0 MAD</small>
+                            </div>
+                            <div class="progress rounded-pill" style="height: 10px;">
+                                <div class="progress-bar bg-brand" role="progressbar"
+                                     th:style="|width: ${action.objectifCollecte != null && action.objectifCollecte > 0 ? (action.sommeActuelle / action.objectifCollecte * 100) : 0}%|"> </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <a class="btn btn-brand btn-sm" th:href="@{/actions/detail/{id}(id=${action.id})}">
+                                    <i class="bi bi-eye me-1"></i>Voir détails
+                                </a>
+                                <span class="badge rounded-pill bg-brand-soft text-white" th:text="${action.organisation != null && action.organisation.validated ? 'Vérifié' : 'En attente'}">Statut</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div class="card-glass overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1518183214770-9cffbec72538?auto=format&fit=crop&w=900&q=80" alt="Campagne urgence" class="img-fluid" style="aspect-ratio: 16/9; object-fit: cover;">
-                    <div class="p-4">
-                        <span class="badge rounded-pill bg-danger text-white mb-3">Urgences</span>
-                        <h3 class="h5 fw-semibold">Aide post-inondations</h3>
-                        <p class="text-muted mb-3">Réhabilitation rapide des familles touchées par les intempéries.</p>
-                        <div class="d-flex align-items-center justify-content-between">
-                            <span class="text-muted small">720k MAD collectés</span>
-                            <span class="badge rounded-pill bg-brand text-white">Vérifié</span>
-                        </div>
-                        <div class="progress rounded-pill mt-3" style="height: 10px;">
-                            <div class="progress-bar bg-danger" role="progressbar" style="width: 88%;" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
+            <div class="col-12" th:if="${#lists.isEmpty(actions)}">
+                <div class="card-glass p-4 text-center text-muted">
+                    <p>Aucune campagne disponible pour le moment. Revenez plus tard.</p>
                 </div>
             </div>
         </div>

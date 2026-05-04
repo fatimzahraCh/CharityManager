@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout}">
+<head>
+    <title>Détail de l'action</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section class="card-glass p-4 p-lg-5 mb-5">
+        <div class="d-flex flex-column gap-4">
+            <div>
+                <p class="text-uppercase small tracking-[0.35em] text-brand-soft mb-2">Campagne</p>
+                <h1 class="display-6 fw-bold" th:text="${action.titre}">Titre de la campagne</h1>
+                <p class="text-muted" th:text="${action.description}">Description complète du projet.</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-7">
+                    <div class="card-glass overflow-hidden">
+                        <img th:src="${action.imageUrl != null && !#strings.isEmpty(action.imageUrl) ? action.imageUrl : (#lists.isEmpty(action.mediaUrls) ? 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=1200&q=80' : action.mediaUrls[0])}"
+                             alt="Image de la campagne"
+                             class="img-fluid"
+                             style="aspect-ratio: 16/9; object-fit: cover;">
+                        <div class="p-4">
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                <span class="badge rounded-pill bg-brand text-white" th:text="${action.categorie != null ? action.categorie : 'Général'}">Catégorie</span>
+                                <span class="badge rounded-pill bg-brand-soft text-white" th:text="${action.organisation.nom}">Organisation</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="small text-muted mb-1">Objectif</p>
+                                    <h5 class="mb-0" th:text="${action.objectifCollecte} + ' MAD'">0 MAD</h5>
+                                </div>
+                                <div>
+                                    <p class="small text-muted mb-1">Collecté</p>
+                                    <h5 class="mb-0" th:text="${action.sommeActuelle} + ' MAD'">0 MAD</h5>
+                                </div>
+                            </div>
+
+                            <div class="progress rounded-pill mt-4" style="height: 12px;">
+                                <div class="progress-bar bg-brand" role="progressbar"
+                                     th:style="|width: ${action.objectifCollecte != null && action.objectifCollecte > 0 ? (action.sommeActuelle / action.objectifCollecte * 100) : 0}%|"
+                                     th:text="${action.objectifCollecte != null && action.objectifCollecte > 0 ? (action.sommeActuelle / action.objectifCollecte * 100).intValue() + '%' : '0%'}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-glass p-4 mt-4">
+                        <h3 class="h5 fw-semibold mb-3">Détails de l'organisation</h3>
+                        <p class="text-muted mb-1"><strong>Nom :</strong> <span th:text="${action.organisation.nom}">Organisation</span></p>
+                        <p class="text-muted mb-1"><strong>Email :</strong> <span th:text="${action.organisation.user.email}">contact@mail.com</span></p>
+                        <p class="text-muted"><strong>Localisation :</strong> <span th:text="${action.lieu != null ? action.lieu : 'Non renseigné'}">Ville</span></p>
+
+                        <div th:if="${isOwner}" class="mt-3">
+                            <form th:action="@{/actions/supprimer/{id}(id=${action.id})}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette action ? Cette action est irréversible.')">
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Supprimer l'action</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-5">
+                    <div class="card-glass p-4 h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <h3 class="h5 fw-semibold mb-3">Participer</h3>
+
+                            <div th:if="${message != null}" class="alert alert-success" th:text="${message}"></div>
+
+                            <div sec:authorize="isAnonymous()" class="alert alert-warning">
+                                <p class="mb-2">Vous devez être connecté pour faire un don.</p>
+                                <a class="btn btn-brand btn-sm" th:href="@{/login}">Connexion</a>
+                            </div>
+
+                            <div th:if="${!action.archived}">
+                                <form sec:authorize="hasRole('USER')" th:action="@{/actions/donner}" method="post" class="row g-3">
+                                    <input type="hidden" name="actionId" th:value="${action.id}">
+
+                                    <div class="col-12">
+                                        <label class="form-label">Montant du don (MAD)</label>
+                                        <input type="number" step="0.01" min="1" class="form-control" name="montant" placeholder="250" required>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-brand w-100">Je participe</button>
+                                    </div>
+                                </form>
+                                <div sec:authorize="hasRole('ORGANISATION')" class="mt-3">
+                                    <p class="text-muted small">Les organisations ne peuvent pas faire de dons à leurs propres actions.</p>
+                                </div>
+                                <div sec:authorize="hasRole('ADMIN')" class="alert alert-warning mt-3">
+                                    <p class="mb-0">Les administrateurs ne peuvent pas faire de dons.</p>
+                                </div>
+                            </div>
+                            <div th:if="${action.archived}" class="alert alert-secondary">
+                                <p class="mb-0">Cette campagne est terminée et n'accepte plus de dons.</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 text-muted small">
+                            <p>En donnant ici, vous soutenez directement l'action de l'organisation.</p>
+                            <p>La plateforme enregistre votre don et met à jour la collecte en temps réel.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

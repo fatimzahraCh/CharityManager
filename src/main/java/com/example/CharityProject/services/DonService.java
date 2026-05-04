@@ -49,6 +49,9 @@ public class DonService {
         // 4. Mettre à jour la somme récoltée de l'action
         double nouvelleSomme = (action.getSommeActuelle() != null ? action.getSommeActuelle() : 0.0) + dto.getMontant();
         action.setSommeActuelle(nouvelleSomme);
+        if (action.getObjectifCollecte() != null && nouvelleSomme >= action.getObjectifCollecte()) {
+            action.setArchived(true);
+        }
         actionRepository.save(action);
 
         // 5. Sauvegarder le don
@@ -58,8 +61,39 @@ public class DonService {
         return mapToResponseDto(donSauvegarde);
     }
 
+    @Transactional
+    public DonResponseDTO effectuerUnDonParEmail(DonRequestDTO dto, String email) {
+        if (dto.getMontant() == null || dto.getMontant() <= 0) {
+            throw new RuntimeException("Le montant du don doit être supérieur à zéro.");
+        }
+
+        User donateur = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable avec l'email : " + email));
+
+        dto.setActionId(dto.getActionId());
+        return effectuerUnDon(dto, donateur.getId());
+    }
+
     public List<Don> obtenirHistoriqueDons(Long userId) {
         return donRepository.findByUserId(userId);
+    }
+
+    public List<DonResponseDTO> obtenirHistoriqueDonsParEmail(String email) {
+        return userRepository.findByEmail(email)
+                .map(user -> donRepository.findByUserId(user.getId()).stream()
+                        .map(this::mapToResponseDto)
+                        .toList())
+                .orElse(List.of());
+    }
+
+    @Transactional
+    public void supprimerDonsParUtilisateur(Long userId) {
+        donRepository.deleteByUserId(userId);
+    }
+
+    public double obtenirTotalCollecteParAction(Long actionId) {
+        Double total = donRepository.sumMontantByActionId(actionId);
+        return total != null ? total : 0.0;
     }
 
     // Mapper interne pour transformer l'entité en DTO

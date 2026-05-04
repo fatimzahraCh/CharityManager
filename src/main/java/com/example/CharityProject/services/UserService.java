@@ -20,6 +20,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final OrganisationRepository organisationRepository; // Injecté ici
     private final PasswordEncoder passwordEncoder;
+    private final DonService donService;
 
     @Transactional // CRITIQUE : Assure que les deux tables sont mises à jour ou aucune
     public User inscrireUtilisateur(UserRegistrationDTO userDto) {
@@ -69,5 +70,53 @@ public class UserService {
 
     public List<User> obtenirTousLesUtilisateurs() {
         return userRepository.findAll();
+    }
+
+    public List<User> obtenirUtilisateursParRole(Role role) {
+        return userRepository.findByRole(role);
+    }
+
+    @Transactional
+    public User creerDonateur(String email, String password, String lastName) {
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new RuntimeException("Cet email est déjà utilisé.");
+        }
+
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setLastName(lastName);
+        user.setRole(Role.ROLE_USER);
+
+        return userRepository.save(user);
+    }
+
+    @Transactional
+    public User modifierUtilisateur(Long id, String email, String lastName, String password) {
+        User user = obtenirUtilisateurParId(id);
+
+        if (!user.getEmail().equals(email) && userRepository.findByEmail(email).isPresent()) {
+            throw new RuntimeException("Cet email est déjà utilisé.");
+        }
+
+        user.setEmail(email);
+        user.setLastName(lastName);
+        if (password != null && !password.isBlank()) {
+            user.setPassword(passwordEncoder.encode(password));
+        }
+
+        return userRepository.save(user);
+    }
+
+    @Transactional
+    public void supprimerUtilisateur(Long id) {
+        User user = obtenirUtilisateurParId(id);
+        donService.supprimerDonsParUtilisateur(id);
+
+        if (user.getRole() == Role.ROLE_ORGANISATION) {
+            organisationRepository.findByUserEmail(user.getEmail()).ifPresent(organisationRepository::delete);
+        }
+
+        userRepository.delete(user);
     }
 }

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Modifier Organisation</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section class="card-glass p-4 p-lg-5 mb-5">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+                <p class="text-uppercase small tracking-[0.35em] text-brand-soft mb-2">Organisation</p>
+                <h1 class="fw-bold">Modifier l'organisation</h1>
+            </div>
+            <a th:href="@{/admin/manage}" class="btn btn-outline-secondary btn-sm">Retour</a>
+        </div>
+
+        <form th:action="@{/admin/organisations/{id}/edit(id=${organisation.id})}" method="post" class="row g-3">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <div class="col-12">
+                <label class="form-label">Email du compte</label>
+                <input type="email" name="email" th:value="${organisation.user.email}" class="form-control" required>
+            </div>
+            <div class="col-12">
+                <label class="form-label">Nom du contact</label>
+                <input type="text" name="lastName" th:value="${organisation.user.lastName}" class="form-control" required>
+            </div>
+            <div class="col-12">
+                <label class="form-label">Nouveau mot de passe</label>
+                <input type="password" name="password" class="form-control" placeholder="Laissez vide pour ne pas changer">
+            </div>
+            <div class="col-12">
+                <label class="form-label">Nom de l'organisation</label>
+                <input type="text" name="nom" th:value="${organisation.nom}" class="form-control" required>
+            </div>
+            <div class="col-12">
+                <label class="form-label">NIF</label>
+                <input type="text" name="nif" th:value="${organisation.nif}" class="form-control" required>
+            </div>
+            <div class="col-12">
+                <label class="form-label">Adresse légale</label>
+                <input type="text" name="adresseLegale" th:value="${organisation.adresseLegale}" class="form-control" required>
+            </div>
+            <div class="col-12">
+                <label class="form-label">Logo URL</label>
+                <input type="url" name="logoUrl" th:value="${organisation.logoUrl}" class="form-control">
+            </div>
+            <div class="col-12">
+                <label class="form-label">Description</label>
+                <textarea name="descriptionMissions" class="form-control" rows="3" th:text="${organisation.descriptionMissions}"></textarea>
+            </div>
+            <div class="col-12">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="validated" value="true" id="validatedOrg" th:checked="${organisation.validated}">
+                    <label class="form-check-label" for="validatedOrg">Organisation validée</label>
+                </div>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-brand w-100">Enregistrer</button>
+            </div>
+        </form>
+    </section>
+</div>
+</body>
+</html>

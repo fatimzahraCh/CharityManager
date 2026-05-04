@@ -22,16 +22,17 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         // 1. Ressources Statiques et Auth
-                        .requestMatchers("/", "/explore", "/login", "/register", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/", "/actions/detail/**", "/login", "/register", "/css/**", "/js/**", "/images/**", "/uploads/**").permitAll()
 
                         // 2. Accès Public API
                         .requestMatchers("/api/**").permitAll()
 
                         // 3. Accès Restreint : Seules les Organisations peuvent créer/gérer
-                        .requestMatchers("/actions/creer", "/actions/save", "/actions/dashboard").hasRole("ORGANISATION")
+                        .requestMatchers("/actions/creer", "/actions/save", "/actions/dashboard", "/actions/editer/**").hasRole("ORGANISATION")
+                        .requestMatchers("/actions/donner").hasRole("USER")
 
                         // 4. Accès Admin
-                        .requestMatchers("/admin/dashboard").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
 
                         // 5. Par défaut : Authentification requise
                         .anyRequest().authenticated()
@@ -47,7 +48,7 @@ public class SecurityConfig {
                             if (isOrga) {
                                 response.sendRedirect("/actions/dashboard");
                             } else {
-                                response.sendRedirect("/");
+                                response.sendRedirect("/profile");
                             }
                         })
                         .permitAll()
